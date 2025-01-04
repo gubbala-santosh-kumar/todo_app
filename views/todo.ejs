@@ -16,7 +16,7 @@
                         class="todo-name-label ml-2 text-sm text-gray-600 cursor-pointer rounded hover:bg-purple-100">
                         <%= data[i].title %>
                     </label>
-                    <%- include('delete_icon.ejs') %>
+                    <%- include('delete_icon.ejs',{ id: data[i].id }) %>
                 </div>
             </li>
         <% } %>
