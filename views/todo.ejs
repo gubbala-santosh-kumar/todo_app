@@ -1,0 +1,23 @@
+<div class="mt-2">
+    <h5 class="font-semibold text-lg"><%= title %></h5>
+    <ul class="list-none pl-4">
+        <% for (let i = 0; i < data.length; i++) { %>
+            <li>
+                <div class="flex items-center w-fit my-2 px-2 py-1">
+                    <!-- Generate a truly unique id using the title and the item's unique ID or index -->
+                    <input 
+                        type="checkbox" 
+                        id="<%= title.toLowerCase().replace(/\s+/g, '-') %>-todo-<%= data[i]._id || i %>" 
+                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300"
+                    >
+                    <label 
+                        for="<%= title.toLowerCase().replace(/\s+/g, '-') %>-todo-<%= data[i]._id || i %>" 
+                        class="todo-name-label ml-2 text-sm text-gray-600 cursor-pointer rounded hover:bg-purple-100">
+                        <%= data[i].title %>
+                    </label>
+                    <%- include('delete_icon.ejs') %>
+                </div>
+            </li>
+        <% } %>
+    </ul>
+</div>

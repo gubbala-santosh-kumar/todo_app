@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="sub-container">
+            <center>
+                <h1 class="text-2xl font-semibold text-gray-600">
+                    My Todo-list
+                </h1>
+        
+                <div class="grid grid-cols-6">
+                    <div class="col-start-3 col-span-2">
+                        <%- include('header.ejs')%>
+                    </div>
+                </div>
+            </center>
+            <form action="/todos" method="post">
+                <div class="flex gap-2 py-4 card-div">
+                    <div class="flex-auto w-64" >
+                        <input type="text" name="title" class="border border-gray-900 text-gray-900 text-sm rounded w-full p-2" placeholder="What is next ?" autofocus="required">
+                    </div>
+                    <div class="flex-auto w-32" >
+                        <input type="date" name="dueDate" class="border border-gray-300 text-gray-900 text-sm rounded w-full p-2 leading-4">
+                    </div>
+                    <div class="flex-none" >
+                        <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded text-sm px-5 py-2 mr-2 mb-2">Add</button>
+                    </div>
+                </div>
+            </form>
+            
+            <div>
+                <%- include('todo.ejs',{title: "OverDue" , data: overdue}) %>
+                <hr>
+                <%- include('todo.ejs',{title: "Due Today", data: dueToday}) %>
+                <hr>
+                <%- include('todo.ejs',{title: "Due Later", data: dueLater}) %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start":"nodemon -e js,ejs",
     "pretest": "cross-env NODE_ENV=test npx sequelize-cli db:drop && cross-env NODE_ENV=test npx sequelize-cli db:create",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
     "prepare": "husky install"
@@ -11,9 +12,13 @@
   "license": "ISC",
   "description": "",
   "jest": {
-    "testMatch": ["**/__tests__/**/*.js", "**/?(*.)+(spec|test).js"]
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/?(*.)+(spec|test).js"
+    ]
   },
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.21.2",
     "pg": "^8.13.1",
     "sequelize": "^6.37.5"
