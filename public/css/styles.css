@@ -53,5 +53,19 @@ body {
 }
 
 .container .sub-container:hover{
-  transform: scale(1.1);
+  transform: scale(1.05);
+}
+
+.card-div{
+  display: flex;
+  justify-content:space-evenly;
+  gap: 5px;
+  box-shadow: 1px 3px 8px black;
+  padding: 5px;
+  padding-top: 10px;
+  border-radius: 10px
+}
+
+.card-div:hover{
+  box-shadow: 1px 1px 8px black inset;
 }
