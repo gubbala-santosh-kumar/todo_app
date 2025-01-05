@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function updateTodo(id){
+            fetch(`/todos/${id}/markAsCompleted`,{
+                method:"PUT",
+                headers: {"Content-Type":"application/json"},
+            })
+            .then((res)=>{
+                if(res.ok){
+                    window.location.reload();
+                }
+            })
+            .catch((err)=> console.error(err));
+        }
+
+        function deleteTodo(id){
+            fetch(`/todos/${id}`,{
+                method: "DELETE",
+                headers: {"Content-Type":"application/json"},
+            })
+            .then((res)=>{
+                if(res.ok){
+                    window.location.reload();
+                }
+            })
+            .catch((err)=> console.error(err));
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="sub-container">
+            <center>
+                <h1 class="text-2xl font-semibold text-gray-600">
+                    My Todo-list
+                </h1>
+            </center>
+            <%- include('header.ejs') %>
+            <div>
+                <%- include('todo.ejs',{title: "OverDue" , data: overdue}) %>
+                <hr>
+                <%- include('todo.ejs',{title: "Due Today", data: dueToday}) %>
+                <hr>
+                <%- include('todo.ejs',{title: "Due Later", data: dueLater}) %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

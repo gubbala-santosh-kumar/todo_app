@@ -4,22 +4,73 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const { url } = require('inspector');
 
+const passport = require('passport');
+const connectEnsurelogin = require('connect-ensure-login');
+const session = require('express-session');
+const LocalStrategy = require('passport-local');
+
 const app = express();
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended:false}));
 
+app.use(session({
+    secret: "my-super-secret-key-234565432345",
+    cookie: {
+        maxAge: 24*60*60*1000 // 1 hour 
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+}, (username, password, done)=>{
+    User.findOne({ where : { email : username, password: password}})
+    .then((user)=>{
+        return done(null,user);
+    }).catch((error)=>{
+        return(error);
+    })
+}));
+
+passport.serializeUser((user, done)=>{
+    console.log("Serializing user in session",user.id)
+    done(null,user.id)
+});
+
+passport.deserializeUser((id, done) => {
+    User.findByPk(id)
+        .then((user) => {
+            done(null, user);
+        })
+        .catch((error) => {
+            done(error, null);
+        });
+});
+
+
 app.set("view engine","ejs");
 
+const {User}=require('./models');
+const { error } = require('console');
+
 app.get('/', async(req,res)=>{
+    res.render('index',{
+        title: "Todo application",
+    });
+});
+
+app.get('/todos', connectEnsurelogin.ensureLoggedIn(), async(req,res)=>{
     const allTodos = await Todo.getTodos();
     const today = new Date().toISOString().split('T')[0];
-
     const overdue = allTodos.filter(todo => todo.dueDate < today);
     const dueToday = allTodos.filter(todo => todo.dueDate === today);
     const dueLater = allTodos.filter(todo => todo.dueDate > today);
 
     if (req.accepts("html")) {
-        res.render('index', {
+        res.render('todos', {
             allTodos,
             overdue,
             dueToday,
@@ -28,6 +79,36 @@ app.get('/', async(req,res)=>{
     } else {
         res.json({ allTodos });
     }
+});
+
+app.get('/signup',(req,res)=>{
+    res.render('signup',{title:"Signup"});
+})
+
+app.post('/users',async (req,res)=>{
+    console.log("FirstName :",req.body);
+    try{
+        const user = await User.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: req.body.password,
+    
+        })
+        req.login(user,(err)=>{
+            if(err){
+                console.log(err);
+            }
+            res.redirect('/todos');
+        })
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login');
 })
 
 app.use(express.static(path.join(__dirname,'public')));

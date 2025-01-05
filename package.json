@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start":"nodemon -e js,ejs",
+    "start": "nodemon -e js,ejs",
     "pretest": "cross-env NODE_ENV=test npx sequelize-cli db:drop && cross-env NODE_ENV=test npx sequelize-cli db:create",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
     "prepare": "husky install"
@@ -18,8 +18,12 @@
     ]
   },
   "dependencies": {
+    "connect-ensure-login": "^0.1.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.13.1",
     "sequelize": "^6.37.5"
   },
