@@ -61,6 +61,7 @@ app.set("view engine","ejs");
 
 const {User}=require('./models');
 const { error } = require('console');
+const { title } = require('process');
 
 app.get('/', async(req,res)=>{
     res.render('index',{
@@ -186,7 +187,12 @@ app.post('/users', async (req, res) => {
 });
 
 app.get('/login',(req,res)=>{
-    res.render('login');
+    res.render('login',{title:"Login"});
+})
+
+app.post('/session', passport.authenticate('local',{failureRedirect : "/login"}),(req,res)=>{
+    console.log(req.user);
+    res.redirect('/todos');
 })
 
 app.use(express.static(path.join(__dirname,'public')));
