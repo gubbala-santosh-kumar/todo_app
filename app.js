@@ -195,15 +195,22 @@ app.post('/session', passport.authenticate('local',{failureRedirect : "/login"})
     res.redirect('/todos');
 })
 
+app.get('/signout',(req,res,next)=>{
+    req.logout((err)=>{
+        if(err) { return next(err)}
+        res.redirect("/");
+    })
+})
+
 app.use(express.static(path.join(__dirname,'public')));
 
 // GET all todos
-app.get('/todos', async (req, res) => {
+app.get('/todos',connectEnsurelogin.ensureLoggedIn(), async (req, res) => {
     console.log("Todo list",req.body);
 });
 
 // POST a new todo
-app.post('/todos', async (req, res) => {
+app.post('/todos',connectEnsurelogin.ensureLoggedIn(), async (req, res) => {
     console.log("Creating a Todo", req.body);
 
     try {
@@ -222,7 +229,7 @@ app.post('/todos', async (req, res) => {
 });
 
 // PUT to mark a todo as completed
-app.put('/todos/:id/markAsCompleted', async (req, res) => {
+app.put('/todos/:id/markAsCompleted', connectEnsurelogin.ensureLoggedIn(), async (req, res) => {
     console.log("Marking Todo as completed", req.params.id);
 
     try {
@@ -241,7 +248,7 @@ app.put('/todos/:id/markAsCompleted', async (req, res) => {
 });
 
 // DELETE a todo
-app.delete('/todos/:id', async (req, res) => {
+app.delete('/todos/:id', connectEnsurelogin.ensureLoggedIn(), async (req, res) => {
     console.log("Deleting Todo", req.params.id);
 
     try{
